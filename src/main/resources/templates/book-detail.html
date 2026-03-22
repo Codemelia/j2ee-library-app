@@ -45,7 +45,10 @@
 		<br>
 		<a th:href="@{/books}">All Books</a>
 		<br>
-		<a th:href="@{/books/book.id/delete}">Delete Book</a>
+		<form th:action="@{/books/{id}/delete(id=${book.id})}"
+			method="POST">
+			<button type="submit">Delete Book</button>
+		</form>
 		<br>
 		<a th:href="@{/}">Back to Home</a>
 	</body>

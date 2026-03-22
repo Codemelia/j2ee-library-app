@@ -59,7 +59,7 @@ public class BookService {
 			return books.stream()
 				.filter(b ->
 					(b.getId() != null && b.getId().equals((long) qNum)) ||
-					(b.getYear() != 0 && b.getYear().equals(qNum))
+					(b.getYear() != 0 && b.getYear() == qNum)
 				).toList();
 		} catch (NumberFormatException e) {
 			return books.stream()
@@ -78,7 +78,7 @@ public class BookService {
 	
  	// delete book by id
 	public boolean deleteById(Long id) {
-		if (id == null || id <= 0 || id > books.size()) return false;
+		if (id == null || id <= 0) return false;
 		return books.removeIf(b -> id.equals(b.getId()));
 	}
 	

@@ -4,6 +4,13 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>BookShelf - Home</title>
+		<style>
+			.success {
+				color: #155724;
+				padding: 10px;
+				border-radius: 4px;
+			}
+		</style>
 	</head>
 	
 	<body>
@@ -11,12 +18,46 @@
 		<h1>Welcome to BookShelf</h1>
 		<p>Your personal library, online.</p>
 		
+		<div class="success" th:if="${success}" 
+			th:text="${success}"></div>
+			
+		<div>
+			<form th:action="@{/genre/add}" method="POST">
+				<label for="genre">Default Genre: </label>
+				<input type="text" id="genre" name="genre"
+					th:value="${session.genre}">
+				<button type="submit">Save Genre</button>
+			</form>
+			<form th:action="@{/genre/clear}" method="POST">
+				<button type="submit">Clear Genre</button>
+			</form>
+		</div>
+		
 		<nav>
 			<ul>
 				<li><a th:href="@{/books}">Browse All Books</a></li>
 				<li><a th:href="@{/books/add}">Add a New Book</a></li>
 			</ul>
 		</nav>
+		
+		<div th:with="recent = ${session.recentIds}">
+			<h2>Recently Viewed Books</h2>
+			<p th:if="${recent == null or #lists.isEmpty(recent)}">
+				No books viewed yet.
+			</p>
+			<ul th:unless="${recent == null or #lists.isEmpty(recent)}">
+				<li th:each="id : ${recent}">
+					<a th:href="@{books/{id}(id=${id})}"
+						th:text="'Book #' + ${id}">Book</a>
+				</li>
+			</ul>
+		</div>
+		
+		<div>
+			<form th:action="@{/session/clear}" method="POST">
+				<button type="submit">Clear My Session</button>
+			</form>
+		</div>
 		
 	</body>
 
