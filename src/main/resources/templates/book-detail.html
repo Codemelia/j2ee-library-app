@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+	<head>
+		<meta charset="UTF-8">
+		<title th:text="${book != null 
+		    ? 'BookShelf - ' + book.title 
+		    : 'No Such Book'}"></title>
+			
+		<style>
+			dl {
+			    display: grid;
+			    grid-template-columns: 150px 1fr;
+			    gap: 8px 12px;
+			}
+
+			dt {
+			    font-weight: bold;
+			}
+
+			dd {
+			    margin: 0;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<h1 th:text="${book != null 
+			? book.title 
+			: 'No such book in the library'}"></h1>
+		
+		<dl th:if="${book != null}">
+			<dt>Book Id</dt>
+			<dd th:text="${book.id}">0</dd>
+			
+			<dt>Author</dt>
+			<dd th:text="${book.author}">No Author Available</dd>
+			
+			<dt>Published Year</dt>
+			<dd th:text="${book.year}">0000</dd>
+
+			<dt>Genre</dt>
+			<dd th:text="${book.genre}">No Genre Available</dd>			
+		</dl>
+		<br>
+		<a th:href="@{/books}">All Books</a>
+		<br>
+		<a th:href="@{/books/book.id/delete}">Delete Book</a>
+		<br>
+		<a th:href="@{/}">Back to Home</a>
+	</body>
+
+</html>

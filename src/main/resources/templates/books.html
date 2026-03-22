@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+	<head>
+		<meta charset="UTF-8">
+		<title>BookShelf - All Books</title>
+		<style>
+			.success p {
+				color: #155724;
+				padding: 10px;
+				border-radius: 4px;
+			}
+			.fail p {
+				color: rgb(128, 0, 0);
+				padding: 10px;
+				border-radius: 4px;
+			}
+			
+			.form {
+				display: flex;
+				gap: 8px;
+				margin-bottom: 15px;
+			}
+			
+			.form input {
+				flex: 1;
+				padding: 5px;
+			}
+			
+			table {
+				border-collapse: collapse;
+				width: 100%;
+				margin-top: 10px;
+			}
+
+			th, td {
+				padding: 8px 10px;
+				border: 1px solid #ccc;
+				text-align: left;
+			}
+
+			th {
+				background-color: #f5f5f5;
+			}
+			
+			.count {
+				margin-top: 10px;
+				font-weight: bold;
+			}
+
+			.actions {
+				margin-top: 15px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<h1>All Books</h1>
+		<p th:if="${#lists.isEmpty(books)}">
+			No books in the library yet.
+		</p>
+		
+		<div class="success" th:if="${success}">
+			<p th:text="${success}"></p>
+		</div>
+		<div class="fail" th:if="${fail}">
+			<p th:text="${fail}"></p>
+		</div>
+		
+		<div th:unless="${#lists.isEmpty(books)}">
+			<form class="form"
+				th:action="@{/books}"
+				method="GET">
+				<input type="text" name="q" th:value="${q}"
+					placeholder="Search by title / author / year / ID">
+				<button type="submit">Search</button>
+				<a th:href="@{/books}">Clear</a>
+			</form>
+			
+			<div class="count">
+				Books available: <span th:text="${books.size()}"></span>
+			</div>
+			
+			<table th:unless="${#lists.isEmpty(books)}">
+				<thead>
+					<th>ID</th>
+					<th>Title</th>
+					<th>Author</th>
+					<th>Year</th>
+					<th>Genre</th>
+					<th>Action</th>
+				</thead>
+				<tbody>
+					<tr th:each="b : ${books}">
+						<td th:text="${b.id}"></td>
+						<td th:text="${b.title}"></td>
+						<td th:text="${b.author}"></td>
+						<td th:text="${b.year}"></td>
+						<td th:text="${b.genre}"></td>
+						<td>
+							<a th:href="@{/books/{id}(id=${b.id})}">
+								View Details
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="actions">
+	        <a th:href="@{/books/add}">Add a New Book</a>
+	        <br>
+	        <a th:href="@{/}">Back to Home</a>
+	    </div>
+	</body>
+
+</html>
