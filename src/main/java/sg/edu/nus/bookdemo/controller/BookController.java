@@ -61,11 +61,11 @@ public class BookController {
 		List<Book> books = new ArrayList<>();
 		
 		if (s.getAttribute("genre") != null)
-			books = bSvc.searchBooks((String) s.getAttribute("genre"));
+			books = bSvc.findBooks((String) s.getAttribute("genre"));
 		else if (q != null && !q.isEmpty()) {
-			books = bSvc.searchBooks(q); // searches and filters books
+			books = bSvc.findBooks(q); // searches and filters books
 		} else {
-			books = bSvc.findAll(); 
+			books = bSvc.findBooks(q); // q = null here, handled in service method 
 		}
 		
 		m.addAttribute("books", books); // add list of books to model
@@ -144,7 +144,7 @@ public class BookController {
 		
 		// validation passed
 		// save failed
-		boolean success = bSvc.save(b);
+		boolean success = b.equals(bSvc.save(b));
 		if (!success) {
 			m.addAttribute("book", b);
 			return "add-book";
@@ -167,7 +167,8 @@ public class BookController {
 	@PostMapping("/books/{id}/delete")
 	public String deleteBook(@PathVariable Long id,
 		RedirectAttributes re) {
-		boolean success = bSvc.deleteById(id);
+		bSvc.deleteById(id);
+		Boolean success = (bSvc.findById(id).isEmpty()); // optional empty
 		if (!success) re.addFlashAttribute("fail", "Delete was unsuccessful.");
 		else re.addFlashAttribute("success", "Delete was successful!");
 		

@@ -1,15 +1,17 @@
 package sg.edu.nus.bookdemo.model;
 
 import java.io.Serializable;
+import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 //import sg.edu.nus.bookdemo.validator.MaxYear;
 
 @Entity
@@ -24,28 +26,31 @@ public class Book implements Serializable {
 	private Long id;
 	
 	@NotBlank(message="Title is required")
-	@Size(max=150, message="Title must contain 150 characters or less")
+	@Column(nullable=false, length=150)
 	private String title;
 	
 	@NotBlank(message="Author is required")
+	@Column(nullable=false, length=100)
 	private String author;
 	
 	@Min(value=1000, message="Year cannot be earlier than 1000")
-//	@MaxYear // default message: Year must be current year or earlier
+//	@MaxYear // using Spring Validator (binded to Controller)
 	private int publicationYear;
 	
 	@NotBlank(message="Genre is required")
 	private String genre;
 	
+	@OneToMany(mappedBy="book")
+	private List<LoanRecord> records;
+	
 	// Constructors
 	public Book() {} // no-arg constructor required for @ModelAttribute
-	public Book(Long id, String title, String author, int year, String
+	public Book(String title, String author, int year, String
 	genre) {
-	this.id = id;
-	this.title = title;
-	this.author = author;
-	this.publicationYear = year;
-	this.genre = genre;
+		this.title = title;
+		this.author = author;
+		this.publicationYear = year;
+		this.genre = genre;
 	}
 	
 	// Getters and Setters
@@ -59,5 +64,7 @@ public class Book implements Serializable {
 	public void setYear(int year) { this.publicationYear = year; }
 	public String getGenre() { return genre; }
 	public void setGenre(String genre) { this.genre = genre; }
+	public List<LoanRecord> getLoanRecords() { return records; }
+	public void setLoanRecords(List<LoanRecord> records) { this.records = records; }
 	
 }
